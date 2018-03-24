@@ -1,4 +1,4 @@
-package org.tarena.note.controller.notebook;
+package org.tarena.note.controller.note;
 
 import javax.annotation.Resource;
 
@@ -6,21 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.tarena.note.entity.NoteResult;
-import org.tarena.note.service.NoteBookService;
 import org.tarena.note.service.NoteService;
-
 @Controller
 @RequestMapping("/note")
-public class AddNoteController {
+public class LoadNotesController {
 	@Resource
 	private NoteService noteService;
-	@RequestMapping("/addnote.do")
+	@RequestMapping("/load.do")
 	@ResponseBody
-	public NoteResult execute(String noteTitle,String bookId,String userId){
-		NoteResult result = noteService.addNote(noteTitle, bookId, userId);
+	public NoteResult execute(String noteId){
+		NoteResult result = noteService.loadNote(noteId);
 		return result;
-		
-		
-		
 	}
 }

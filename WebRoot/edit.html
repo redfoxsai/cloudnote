@@ -23,23 +23,38 @@
 <link href="styles/umeditor.min.css" type="text/css" rel="stylesheet">
 <!-- 脚本库 -->
 <script type="text/javascript" src="scripts/jquery.min.js"></script>
+	<!-- Ueditor编辑器JS -->
+<script type="text/javascript" charset="utf-8"	src="scripts/ue/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8"	src="scripts/ue/umeditor.min.js"></script>
+<script type="text/javascript" src="scripts/ue/lang/zh-cn.js"></script>
+	<!-- Bootstrap框架JS -->
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/js-prototype.js"></script>
+<script src="scripts/theme-setup.js"></script>
+	<!-- Google-Code代码高亮JS -->
+<script class="re-execute" src="scripts/run_prettify.js"></script>
+
 <script type="text/javascript" src="scripts/cookie_util.js"></script>
 <script type="text/javascript" src="scripts/notebook.js"></script>
 <script type="text/javascript" src="scripts/note.js"></script>
+
 
 <script type="text/javascript">
 	//从cookie获取userID
 	var userId = getCookie("uid");
 	//简易登陆检查
+	var um;
 	if (userId == null) {
 		window.location.href = "log_in.html";
 	}
 	//加载笔记列表
 	$(function() {
+		um = UM.getEditor('myEditor');
 		//页面载入之后调用notebook.js里的loadNoteBooks方法,实现载入操作
 		loadNoteBooks();
 		//点击笔记本,加载笔记,动态绑定事件处理(给现有或未来匹配元素绑定事件)
 		$("#book_list").on("click", "li", loadnotes);
+		
 		//添加笔记本+按钮绑定处理
 		
 		$("#add_notebook").click(showAddBookWindow);
@@ -50,8 +65,15 @@
 		
 		//点击添加笔记加号动作,输出一个对话框,有现成的XXX.html找出来,实现
 		$("#add_note").click(showAddNoteWindow);
+		
+		//$("#note_list").on("click", "li", loadnotes);
 		//创建笔记按钮处理
 		$("#can").on("click", "#sure_addnote",sureAddNote);
+		
+		//点击笔记操作,点击笔记,发送ajax请求,从数据库读取笔记信息,呈现道笔记编辑区和编辑器里
+		$("#note_list").on("click","li",loadNote);
+		
+		//保存笔记按钮处理
 
 	});
 </script>
@@ -340,23 +362,12 @@
 			$('#myEditor').width(width - 20);
 		};
 	</script>
-	<!-- Bootstrap框架JS -->
-	<script src="scripts/bootstrap.min.js"></script>
-	<script src="scripts/js-prototype.js"></script>
-	<script src="scripts/theme-setup.js"></script>
-	<!-- Google-Code代码高亮JS -->
-	<script class="re-execute" src="scripts/run_prettify.js"></script>
+
 	<!-- 页面事件处理JS -->
-	<!-- Ueditor编辑器JS -->
-	<script type="text/javascript" charset="utf-8"
-		src="scripts/ue/umeditor.config.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="scripts/ue/umeditor.min.js"></script>
-	<script type="text/javascript" src="scripts/ue/lang/zh-cn.js"></script>
+
 
 	<script type="text/javascript">
 		//重写JS原生alert函数
-		/*
 			window.alert=function(e){
 				$('#can').load('./alert/alert_error.html',function(){
 					$('#error_info').text(' '+e);
@@ -364,13 +375,12 @@
 				});
 			}
 			
-		*/
 		//获取笔记本列表
 		//get_nb_list();
 		//获取特殊笔记本ID
 		//get_spnb_list();
 		//实例化Ueditor编辑器
-		var um = UM.getEditor('myEditor');
+		//var um = UM.getEditor('myEditor');
 	</script>
 </body>
 </html>
